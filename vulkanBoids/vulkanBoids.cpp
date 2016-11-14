@@ -36,9 +36,9 @@
 #define RULE1DISTANCE 0.1f // cohesion
 #define RULE2DISTANCE 0.05f // separation
 #define RULE3DISTANCE 0.05f // alignment
-#define RULE1SCALE 0.02f
-#define RULE2SCALE 0.05f
-#define RULE3SCALE 0.01f
+#define RULE1SCALE 0.01f
+#define RULE2SCALE 0.02f
+#define RULE3SCALE 0.6f
 
 class VulkanExample : public VulkanExampleBase
 {
@@ -157,7 +157,7 @@ public:
 		for (auto& particle : particleBuffer)
 		{
 			particle.pos = glm::vec2(rDistribution(rGenerator), rDistribution(rGenerator));
-			// TODO: add randomized velocities with a slight scale here, something like 0.1f.
+			particle.vel = 0.1f * glm::vec2(rDistribution(rGenerator), rDistribution(rGenerator));
 		}
 
 		VkDeviceSize storageBufferSize = particleBuffer.size() * sizeof(Particle);
@@ -244,7 +244,7 @@ public:
 			VERTEX_BUFFER_BIND_ID,
 			1,
 			VK_FORMAT_R32G32_SFLOAT,
-			offsetof(Particle, pos)); // TODO: change this so that we can color the particles based on velocity.
+			offsetof(Particle, vel));
 
 		// vertices.inputState encapsulates everything we need for these particular buffers to
 		// interface with the graphics pipeline.
@@ -517,9 +517,11 @@ public:
 		{
 			// LOOK
 			// WriteDescriptorSet writes each of these descriptors into the specified descriptorSet.
-			// THese first few are written into compute.descriptorSet[0].
 			// Each of these corresponds to a layout binding in the descriptor set layout,
 			// which in turn corresponds with something like `layout(std140, binding = 0)` in `particle.comp`.
+			// We want the descriptorSets to be used for flip-flopping:
+			// on one frame, we use one descriptorSet with the compute pass,
+			// on the next frame, we use the other.
 
 			// Binding 0 : Particle position storage buffer
 			vkTools::initializers::writeDescriptorSet(
@@ -540,13 +542,28 @@ public:
 			compute.descriptorSets[0],
 			VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
 			2,
-			&compute.uniformBuffer.descriptor)
+			&compute.uniformBuffer.descriptor),
 
-			// TODO: write the second descriptorSet, using the top for reference.
-			// We want the descriptorSets to be used for flip-flopping:
-			// on one frame, we use one descriptorSet with the compute pass,
-			// on the next frame, we use the other.
-			// What has to be different about how the second descriptorSet is written here?
+			// Binding 0 : Particle position storage buffer
+			vkTools::initializers::writeDescriptorSet(
+			compute.descriptorSets[1], // LOOK: which descriptor set to write to?
+			VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+			0, // LOOK: which binding in the descriptor set Layout?
+			&compute.storageBufferB.descriptor), // LOOK: which SSBO?
+
+			// Binding 1 : Particle position storage buffer
+			vkTools::initializers::writeDescriptorSet(
+			compute.descriptorSets[1],
+			VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+			1,
+			&compute.storageBufferA.descriptor),
+
+			// Binding 2 : Uniform buffer
+			vkTools::initializers::writeDescriptorSet(
+			compute.descriptorSets[1],
+			VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+			2,
+			&compute.uniformBuffer.descriptor)
 		};
 
 		vkUpdateDescriptorSets(device, static_cast<uint32_t>(computeWriteDescriptorSets.size()), computeWriteDescriptorSets.data(), 0, NULL);
@@ -589,7 +606,8 @@ public:
 		// in one configuration.
 		// We also want to flip what SSBO we draw with in the next
 		// pass through the graphics pipeline.
-		// Feel free to use std::swap here. You should need it twice.
+		std::swap(compute.descriptorSets[0], compute.descriptorSets[1]);
+		std::swap(compute.storageBufferA, compute.storageBufferB);
 	}
 
 	// Record command buffers for drawing using the graphics pipeline
