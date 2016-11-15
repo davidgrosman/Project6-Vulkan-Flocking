@@ -11,6 +11,9 @@ Project 6: Vulkan Flocking: compute and shading in one pipeline!
 ![](img/Preview.gif)
 ![](img/PreviewTwo.gif)
 
+### Project Description
+In this project, we were introduced to the workings of a basic Vulkan compute-and-shading application. I implemented a 2D version of the Boids algorithm that I implemented back in Project 1. Covered concepts included setting up basic compute and graphics pipelines, setting up vertex buffers that can be shared between both pipelines, creating commands for each pipeline, and binding information to each pipeline.
+
 ### Project Analysis
 
 1. __***Why do you think Vulkan expects explicit descriptors for things like generating pipelines and commands? HINT: this may relate to something in the comments about some components using pre-allocated GPU memory.underline bold italics***__
