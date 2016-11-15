@@ -36,7 +36,7 @@ The most obvious advantage in using multiple queues is that Commands submitted t
  Race-conditions might occur if writing some output in a buffer used accross multiple queues.
  * **What is one advantage of using compute commands that can share data with a rendering pipeline?**
  
-One of the advantage is to avoid duplicating large data buffers necessary by the compute and graphics queue.
+ One of the advantage is to avoid duplicating large data buffers necessary by the compute and graphics queue.
 
 ### Blooper
 ![](img/Centrifuge.gif)
