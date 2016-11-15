@@ -16,12 +16,16 @@ In this project, we were introduced to the workings of a basic Vulkan compute-an
 
 ### Project Analysis
 
-1. __***Why do you think Vulkan expects explicit descriptors for things like generating pipelines and commands? HINT: this may relate to something in the comments about some components using pre-allocated GPU memory.underline bold italics***__
+1. __***Why do you think Vulkan expects explicit descriptors for things like generating pipelines and commands? HINT: this may relate to something in the comments about some components using pre-allocated GPU memory.***__
+
 Since Vulkan is a low-level Graphics API, it expects its users to specify low-level information such as pipeline information (Buffer, image and shader resources binding) and  thus explicit descriptors should also be specified to bound them to command buffer for use by the next draw.
+
 2. __***Describe a situation besides flip-flop buffers in which you may need multiple descriptor sets to fit one descriptor layout.***__
+
 Since a desciptor set correspond to a layout binding in the descriptor set layout, which in turn corresponds with something like `layout(std140, binding = 0)` in `particle.comp`. It is easy to see that a rendering a scene with multiple models (with different vertex/index buffer, normal buffer, etc.) would be another situation in which you would need multiple descriptor sets to fit one descriptor layout.
 
 3. __***What are some problems to keep in mind when using multiple Vulkan queues?***__
+
 The most obvious advantage in using multiple queues is that Commands submitted to different queues may execute in parallel or even out of order with respect to one another. However, this is only advantageous if queues do not need a lot of synchronization between themselves. Since it is the user's responsability to ensure correct work coordination through given primitives such as semaphores, barriers and fences, it makes it harder to use multiple Vulkan queues (in exchange for better performance). 
  * **Take into consideration that different queues may be backed by different hardware**
  Since the queues are backed by different hardware, it means that optimizations for one machine might decrease the performance on another machine (ie.: if a queue is backed by a special hardware which isn't present on all machines running the application these machines might need to back it on the software side which will probably be slower.) 
