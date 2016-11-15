@@ -82,7 +82,7 @@ vec2 computeVelocityChange(int N, uint iSelf)
     }
 	totalVel	+= sumDelta * ubo.rule2Scale;
 	if (numBoidsRule[1] > 0) {
-        totalVel	+= sumVel * ubo.rule3Scale;
+        totalVel	+= (sumVel) * ubo.rule3Scale;
     }
     
     return totalVel;
@@ -98,7 +98,7 @@ void main()
 		return;
     }
 
-    vec2 vNewVel = computeVelocityChange(ubo.particleCount, gl_GlobalInvocationID.x);
+    vec2 vNewVel = computeVelocityChange(ubo.particleCount, iSelf);
 
 	// clamp velocity for a more pleasing simulation.
 	vNewVel = normalize(vNewVel) * clamp(length(vNewVel), 0.0, 0.1);

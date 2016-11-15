@@ -38,7 +38,7 @@
 #define RULE3DISTANCE 0.05f // alignment
 #define RULE1SCALE 0.01f
 #define RULE2SCALE 0.02f
-#define RULE3SCALE 0.6f
+#define RULE3SCALE 0.3f
 
 class VulkanExample : public VulkanExampleBase
 {
