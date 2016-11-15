@@ -23,7 +23,7 @@ Project 6: Vulkan Flocking: compute and shading in one pipeline!
  * **What is one advantage of using compute commands that can share data with a rendering pipeline?**
 
 ### Blooper
-![](img/Video.gif)
+![](img/Centrifuge.gif)
 
 ### Credits
 
