@@ -28,10 +28,14 @@ Since a desciptor set correspond to a layout binding in the descriptor set layou
 
 The most obvious advantage in using multiple queues is that Commands submitted to different queues may execute in parallel or even out of order with respect to one another. However, this is only advantageous if queues do not need a lot of synchronization between themselves. Since it is the user's responsability to ensure correct work coordination through given primitives such as semaphores, barriers and fences, it makes it harder to use multiple Vulkan queues (in exchange for better performance). 
  * **Take into consideration that different queues may be backed by different hardware**
+ 
  Since the queues are backed by different hardware, it means that optimizations for one machine might decrease the performance on another machine (ie.: if a queue is backed by a special hardware which isn't present on all machines running the application these machines might need to back it on the software side which will probably be slower.) 
+ 
  * **Take into consideration that the same buffer may be used across multiple queues**
+ 
  Race-conditions might occur if writing some output in a buffer used accross multiple queues.
  * **What is one advantage of using compute commands that can share data with a rendering pipeline?**
+ 
 One of the advantage is to avoid duplicating large data buffers necessary by the compute and graphics queue.
 
 ### Blooper
