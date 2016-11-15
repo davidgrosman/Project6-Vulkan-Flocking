@@ -8,8 +8,8 @@ Project 6: Vulkan Flocking: compute and shading in one pipeline!
 
 ### Demo Video/GIF
 
-[![](img/Preview.gif)]
-[![](img/PreviewTwo.gif)]
+![](img/Preview.gif)
+![](img/PreviewTwo.gif)
 
 ### Project Analysis
 
@@ -23,7 +23,7 @@ Project 6: Vulkan Flocking: compute and shading in one pipeline!
  * **What is one advantage of using compute commands that can share data with a rendering pipeline?**
 
 ### Blooper
-[![](img/Video.gif)]
+![](img/Video.gif)
 
 ### Credits
 
